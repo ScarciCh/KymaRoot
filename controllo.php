@@ -6,33 +6,53 @@
 
     <body>
         <?php
-            ini_set('display_errors', 0);
+            ini_set('display_errors', 1);
 
-            require "com/config.php";
-            require "com/connect.php";
+            //session_regenerate_id(true);
+            session_start();
 
-            $nomeUtente = trim($_POST["nomeUtente"]);
-            $password = trim($_POST["password"]);
+            /*if (isset($_SESSION['session_id'])) {
+                header('Location: home.php');
+                exit;
+            }*/
 
-            $query = "SELECT * FROM utente WHERE username = '$nomeUtente' AND password = '$password'";
-            $riga_letta = mysqli_query($connessione, $query);
+            require "config/config.php";
 
-            if(!$riga_letta)
+            if (isset($_POST['login']))
             {
-                header("Location: login.html?error=Dati errati");
-                exit("Dati Errati");
-            }
-            else
-            {
-                if (mysqli_num_rows($riga_letta) === 1)
+                $username = $_POST["nomeUtente"] ?? '';
+                $password = $_POST["password"] ?? '';
+
+                if (empty($username) || empty($password))
                 {
-                    $righe = mysqli_fetch_assoc($riga_letta);
-                    
-                    if($righe['username']===$nomeUtente && $righe['password']===$password)
+                    $msg = 'Inserisci username e password %s';
+                } 
+                else 
+                {
+                    $query = "SELECT username, password FROM utente WHERE username = :username";
+                        
+                    $check = $pdo->prepare($query);
+                    $check->bindParam(':username', $username, PDO::PARAM_STR);
+                    $check->execute();
+                        
+                    $user = $check->fetch(PDO::FETCH_ASSOC);
+                        
+                    if (!$user || $password !== $user['password'])
                     {
-                        echo("Dati corretti!");
+                        $msg = 'Credenziali utente errate %s';
+                    }
+                    else
+                    {
+                        session_regenerate_id();
+                        $_SESSION['session_id'] = session_id();
+                        $_SESSION['session_user'] = $user['username'];
+                        
+                        header('Location: home.php');
+                        exit;
                     }
                 }
+                    
+                printf($msg, '<a href="login.html">torna indietro</a>');
             }
         ?>
     </body>
