@@ -28,8 +28,7 @@ function is_username_wrong(bool|array $result)
 
 function is_password_wrong(string $pwd, string $hashPwd)
 {
-    //if(!password_verify($pwd, $hashPwd)) DA IMPLEMENTARE DOPO LA PAGINA DI REGISTRAZIONE
-    if($pwd !== $hashPwd)
+    if(!password_verify($pwd, $hashPwd))
     {
         return true;
     }

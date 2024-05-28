@@ -1,61 +1,69 @@
 <?php
 
-$username = $_POST['username'];
-$pwd = $_POST['pwd'];
-
-try
+if($_SERVER["REQUEST_METHOD"] === "POST")
 {
-    require_once 'dbh.inc.php';
-    require_once 'login_model.inc.php';
-    require_once 'login_contr.inc.php';
+    $username = $_POST['username'];
+    $pwd = $_POST['pwd'];
 
-    $errors = [];
-
-    if(is_input_empty($username, $pwd))
+    try
     {
-        $errors["empty_input"] = "I campi richiesti sono vuoti!";
-    }
+        require_once 'dbh.inc.php';
+        require_once 'login_model.inc.php';
+        require_once 'login_contr.inc.php';
 
-    $result = get_user($pdo, $username);
+        $errors = [];
 
-    if(is_username_wrong($result))
-    {
-        $errors["login_incorrect"] = "Username o Password errati.";
-    }
-    
-    if(!is_username_wrong($result) && is_password_wrong($pwd, $result["pwd"]))
-    {
-        $errors["login_incorrect"] = "Username o Password errati.";
-    }
+        
+        if(is_input_empty($username, $pwd))
+        {
+            $errors["empty_input"] = "I campi richiesti sono vuoti!";
+        }
 
-    require_once 'config_session.inc.php';
+        $result = get_user($pdo, $username);
 
-    if($errors)
-    {
-        $_SESSION["errors_login"] = $errors;
+        if(is_username_wrong($result))
+        {
+            $errors["login_incorrect"] = "Username o Password errati.";
+        }
+        if(!is_username_wrong($result) && is_password_wrong($pwd, $result["pwd"]))
+        {
+            $errors["login_incorrect"] = "Username o Password errati.";
+        }
 
-        header("Location: ../index.php");
+        require_once 'config_session.inc.php';
+
+        if($errors)
+        {
+            $_SESSION["error_login"] = $errors;
+
+            header("Location: ../index_login.php");
+            die();
+        }
+
+        $newSessionId = session_create_id();
+        $sessionId = $newSessionId . "_" . $result["idUtente"];
+        session_id($sessionId);
+
+        $_SESSION["user_id"] = $result["idUtente"];
+        $_SESSION["user_username"] = htmlspecialchars($result["username"]);
+
+        $_SESSION["last_regeneration"] = time();
+
+        header("Location: ../index.php?login=success");
+        
+        $pdo = null;
+        $stmt = null;
+
         die();
     }
-
-    $newSessionId = session_create_id();
-    $sessionId = $newSessionId . "_" . $result["idUtente"];
-    session_id($sessionId);
-
-    $_SESSION["user_id"] = $result["idUtente"];
-    $_SESSION["user_username"] = htmlspecialchars($result["username"]);
-
-    $_SESSION["last_regeneration"] = time();
-
-    header("Location: ../index.php?login=success");
-    $pdo = null;
-    $stmt = null;
-
+    catch(PDOException $e)
+    {
+        die("Query fallita" . $e->getMessage());
+    }
+}
+else
+{
+    header("Location: ../index.php");
     die();
 }
-catch(PDOException $e)
-{
-    die("Query fallita" . $e->getMessage());
-}
-
 ?>

@@ -1,2 +1,2 @@
 # KymaRoot
-Progetto Kyma Root v240527
+Progetto Kyma Root v240528

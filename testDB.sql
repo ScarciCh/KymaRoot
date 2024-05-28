@@ -16,7 +16,8 @@ CREATE TABLE Utente(
     idUtente int AUTO_INCREMENT,
     username varchar(20) UNIQUE,
     pwd varchar(100),
-    tipologiaUtente int,
+    tipologiaUtente int DEFAULT 1,
+    created_at DATETIME DEFAULT CURRENT_TIME,
 
     PRIMARY KEY(idUtente),
     FOREIGN KEY(tipologiaUtente) REFERENCES CategoriaUtente(idCategoria)
@@ -30,8 +31,8 @@ CREATE TABLE Documenti (
     file_path VARCHAR(255) NOT NULL
 );
 
-INSERT INTO CategoriaUtente(idCategoria, nomeCategoria, canRead, canModify, canDelete) VALUES (1, "Generico", true, false, false);
-INSERT INTO CategoriaUtente(idCategoria, nomeCategoria, canRead, canModify, canDelete) VALUES (2, "Admin", true, true, true);
+INSERT INTO CategoriaUtente(idCategoria, nomeCategoria, canRead, canModify, canDelete) VALUES (1, "Non Autorizzato", false, false, false);
+INSERT INTO CategoriaUtente(idCategoria, nomeCategoria, canRead, canModify, canDelete) VALUES (2, "Generico", true, false, false);
+INSERT INTO CategoriaUtente(idCategoria, nomeCategoria, canRead, canModify, canDelete) VALUES (3, "Admin", true, true, true);
 
-INSERT INTO Utente(username, pwd, tipologiaUtente) VALUES ("franco", "f123", 2);
-INSERT INTO Utente(username, pwd, tipologiaUtente) VALUES ("dario", "d123", 1);
+INSERT INTO Utente(username, pwd) VALUES ("admin", "12345");

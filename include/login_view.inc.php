@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 function check_login_errors()
 {
-    if(isset($_SESSION["errors_login"]))
+    if(isset($_SESSION["error_login"]))
     {
-        $errors = $_SESSION["errors_login"];
+        $errors = $_SESSION["error_login"];
         echo "<br>";
 
         foreach($errors as $error)
@@ -14,12 +14,24 @@ function check_login_errors()
             echo '<p class=form-error>' . $error . '</p>';
         }
 
-        unset($_SESSION["errors_login"]);
+        unset($_SESSION["error_login"]);
     }
     else if (isset($_GET['login']) && $_GET['login'] === "success")
     {
-        echo "<br>";
-        echo '<p class=form-success>Login...</p>';
+        header("Location: home.php");
+        die();
+    }
+}
+
+function output_username()
+{
+    if(isset($_SESSION["user_id"]))
+    {
+        echo "Utente: " . $_SESSION["user_username"];
+    }
+    else
+    {
+        echo "Sessione scaduta.";
     }
 }
 

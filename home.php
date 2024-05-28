@@ -1,43 +1,25 @@
+<?php
+session_start();
+require_once "include/login_view.inc.php";
+//require_once "include/auth.inc.php";
+?>
+
 <!DOCTYPE html>
 <html lang="it">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Benvenuto</title>
-    <link rel="stylesheet" href="resources/styles.css">
-</head>
-<body>
-    <div class="container">
-        <div class="sidebar">
-        <div class="logo">
-                <img src="resources/img/solo-colorato.png" alt="Logo">
-            </div>
-            <div class="user-menu">
-                <div class="username">nome.utente &#9660;</div>
-                <ul>
-                    <li><a href="#">Profilo</a></li>
-                    <li><a href="#">Gestisci</a></li>
-                    <li><a href="#">Logout</a></li>
-                    <li><a href="bacheca.php">bacheca</a></li>
-                </ul>
-            </div>
-            <div class="dashboard"></div>
-            <div class="admin-section">
-                <div class="admin">(Admin)</div>
-                <div class="manage-users"><a href="#">Gestisci Utenti</a></div>
-            </div>
-        </div>
-        <div class="main-content">
-            <h1>Benvenuto</h1>
-            <div class="dashboard-content">
-                <p>Dashboard</p>
-                <p>Novità</p>
-            </div>
-        </div>
-        <div class="search-bar">
-            <input type="text" placeholder="Ricerca">
-            <button>🔍</button>
-        </div>
-    </div>
-</body>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, iniatial scale=1.0">
+        <title>Kyma Root | Home</title>
+    </head>
+
+    <body>
+        <h3>Benvenuto alla Home</h3>
+
+        <form action="include/logout.inc.php" method="post">
+            <div><?php output_username() ?> &#9660</div>
+            <a href="#">Profilo</a> <br>
+            <a href="#" onclick="this.closest('form').submit();return false;">Logout</a>
+        </form>    
+    </body>
 </html>
