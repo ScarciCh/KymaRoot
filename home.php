@@ -1,7 +1,6 @@
 <?php
 session_start();
 require_once "include/login_view.inc.php";
-//require_once "include/auth.inc.php";
 ?>
 
 <!DOCTYPE html>
@@ -17,9 +16,21 @@ require_once "include/login_view.inc.php";
         <h3>Benvenuto alla Home</h3>
 
         <form action="include/logout.inc.php" method="post">
-            <div><?php output_username() ?> &#9660</div>
-            <a href="#">Profilo</a> <br>
+            <div><?php output_username() ?> &#9660 <br> Tipologia Utente: <br><b><?php output_privilege_id() ?>. <?php output_privilege_name() ?></b><br></div>
+            <a href="profile.php">Profilo</a> <br>
             <a href="#" onclick="this.closest('form').submit();return false;">Logout</a>
-        </form>    
+        </form>
+        
+        <br> <!-- Sezione Utenti -->
+
+        <a href="bacheca.php">Bacheca</a> <br>
+        
+        <br> <!-- Sezione Admin -->
+
+        <a href="lista_utenti.php">Gestisci Utenti</a> <br>
+
+        <?php
+        check_login_errors();
+        ?>
     </body>
 </html>

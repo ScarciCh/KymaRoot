@@ -46,7 +46,13 @@ if($_SERVER["REQUEST_METHOD"] === "POST")
 
         $_SESSION["user_id"] = $result["idUtente"];
         $_SESSION["user_username"] = htmlspecialchars($result["username"]);
-
+        $_SESSION['user_privilege'] = htmlspecialchars($result['tipologiaUtente']);
+        $_SESSION['user_privilege_name'] = htmlspecialchars($result['nomeCategoria']);
+        if(!empty($result['famigliaUtente']))
+        {
+            $_SESSION['user_family'] = htmlspecialchars($result['famigliaUtente']);
+            $_SESSION['user_family_name'] = htmlspecialchars($result['nomeFamiglia']);
+        }
         $_SESSION["last_regeneration"] = time();
 
         header("Location: ../index.php?login=success");

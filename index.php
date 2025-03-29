@@ -25,6 +25,7 @@ require_once 'include/login_view.inc.php';
     <?php
     check_signup_errors();
     check_login_errors();
+    check_session_errors();
     ?>
 
 </html>

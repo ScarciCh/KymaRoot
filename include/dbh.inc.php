@@ -1,6 +1,6 @@
 <?php
     $host = 'localhost';
-    $dbname = 'kymatest';
+    $dbname = 'KymaRoot_db';
     $dbusername = 'root';
     $dbpassword = '';
     
@@ -9,6 +9,8 @@
     {
         $pdo = new PDO("mysql:host=$host;dbname=$dbname", $dbusername, $dbpassword);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        $pdo_sqli = mysqli_connect($host, $dbusername, $dbpassword, $dbname);
     }
     catch (PDOException $e)
     {

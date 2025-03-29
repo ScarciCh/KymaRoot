@@ -1,91 +1,75 @@
 <?php
-require "config/config.php";
+session_start();
+require_once "include/auth.inc.php";
+require_once "include/dbh.inc.php";
 
-$conn = new mysqli( $config['db_host'], $config['db_user'], $config['db_password'], $config['db_name']);
-
-if ($conn->connect_error) {
-    die("Connessione fallita: " . $conn->connect_error);
+if(!isset($_SESSION["user_id"]))
+{
+    header("Location: index.php");
+    $_SESSION["session_error"] = "Sessione scaduta";
+    die();
 }
 
-// Caricamento file
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['file'])) {
-    $target_dir = "uploads/";
-    $target_file = $target_dir . basename($_FILES["file"]["name"]);
-    $uploadOk = 1;
-    $fileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
-
-    if (move_uploaded_file($_FILES["file"]["tmp_name"], $target_file)) {
-        $name = $_POST['name'];
-        $owner = $_POST['owner'];
-        $date_uploaded = date("Y-m-d");
-        $file_path = $target_file;
-
-        $sql = "INSERT INTO documents (name, owner, date_uploaded, file_path) VALUES ('$name', '$owner', '$date_uploaded', '$file_path')";
-
-        if ($conn->query($sql) === TRUE) {
-            echo "File caricato con successo.";
-        } else {
-            echo "Errore: " . $sql . "<br>" . $conn->error;
-        }
-    } else {
-        echo "Errore durante il caricamento del file.";
-    }
+if (user_not_auth("bacheca"))
+{
+    header("Location: not_auth.html");
+    die();
 }
-
-// Recupero documenti dal database
-$sql = "SELECT * FROM documents ORDER BY date_uploaded DESC";
-$result = $conn->query($sql);
 ?>
 
 <!DOCTYPE html>
 <html lang="it">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bacheca</title>
-    <link rel="stylesheet" href="resources/bacheca_style.css">
-</head>
-<body>
-    <div class="container">
-        <h1>Bacheca</h1>
-        <form action="bacheca.php" method="post" enctype="multipart/form-data">
-            Nome file: <input type="text" name="name" required>
-            Proprietario: <input type="text" name="owner" required>
-            Seleziona file: <input type="file" name="file" required>
-            <input type="submit" value="Carica">
-        </form>
-        <table>
-            <thead>
-                <tr>
-                    <th>Nome</th>
-                    <th>Proprietario</th>
-                    <th>Data di caricamento</th>
-                    <th>Azione</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-                if ($result->num_rows > 0) {
-                    while ($row = $result->fetch_assoc()) {
-                        echo "<tr>
-                                <td>" . htmlspecialchars($row['name']) . "</td>
-                                <td>" . htmlspecialchars($row['owner']) . "</td>
-                                <td>" . htmlspecialchars($row['date_uploaded']) . "</td>
-                                <td><a href='" . htmlspecialchars($row['file_path']) . "' target='_blank'>Visualizza</a></td>
-                              </tr>";
-                    }
-                } else {
-                    echo "<tr><td colspan='4'>Nessun documento trovato</td></tr>";
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, iniatial scale=1.0">
+        <title>Kyma Root | Bacheca</title>
+    </head>
+
+    <body>
+        <h3>Bacheca Documenti</h3>
+        <a href="add_document.php">Aggiungi Documento</a> <br>
+
+        <table border=1>
+            <tr>
+                <th><b>Id</b></th>
+                <th><b>Tipologia</b></th>
+                <th><b>Oggetto</b></th>
+                <th><b>Validita</b></th>
+                <th><b>Numero</b></th>
+                <th><b>Firma</b></th>
+                <th><b>Data</b></th>
+                <th><b>Azioni</b></th>
+            </tr>
+
+            <?php
+            
+            $query = "SELECT * FROM Documento D JOIN Associazione A ON D.idDocumento = A.documento JOIN FamigliaUtente F ON A.destinatario = F.idFamiglia JOIN Utente U ON U.famigliaUtente = F.idFamiglia WHERE U.famigliaUtente = " . $_SESSION["user_family"];        
+            $result = mysqli_query($pdo_sqli, $query);
+            $resultCheck = mysqli_num_rows($result);
+            
+            if($resultCheck>0)
+            {
+                while($row=mysqli_fetch_assoc($result))
+                {
+                    echo "<tr>";
+                    echo "<td>" . $row["idDocumento"] . "</td>";
+                    echo "<td>" . $row["tipologiaDocumento"] . "</td>";
+                    echo "<td>" . $row["oggettoDocumento"] . "</td>";
+                    echo "<td>" . $row["validitaDocumento"] . "</td>";
+                    echo "<td>" . $row["numeroDocumento"] . "</td>";
+                    echo "<td>" . $row["firmaDocumento"] . "</td>";
+                    echo "<td>" . $row["dataDocumento"] . "</td>";
+                    echo "<td>";
+                    echo "<a href=" . $row["linkDocumento"] . " target='_blank'>Visualizza</a> | ";
+                    echo "<a href='edit_document.php?id=" . $row["idDocumento"] . "'>Modifica</a>";
+                    echo "</td>";
+                    echo "</tr>";
                 }
-                ?>
-            </tbody>
+            }
+            ?>
         </table>
-    </div>
-
-    <a href="home.php">Torna alla Home</a>
-</body>
+        <br>
+        <a href="home.php">Torna alla home</a>
+    </body>
 </html>
-
-<?php
-$conn->close();
-?>
