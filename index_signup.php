@@ -15,6 +15,7 @@ require_once 'include/signup_view.inc.php';
     </head>
 
     <body>
+        <!-- Una volta completata la registrazione il modulo "signup.inc.php" gestirá la richiesta-->
         <form action="include/signup.inc.php" method="post">
             <h3>Registrazione</h3>
 

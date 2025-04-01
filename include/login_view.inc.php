@@ -1,7 +1,11 @@
 <?php
-
+// Modulo per la visualizzazione degli errori Login a schermo
 declare(strict_types=1);
 
+/**
+ * Controlla se ci sono errori di login nella sessione e li mostra a schermo.
+ * Dopo averli mostrati, rimuove gli errori dalla sessione.
+ */
 function check_login_errors()
 {
     if(isset($_SESSION["error_login"]))
@@ -16,6 +20,7 @@ function check_login_errors()
 
         unset($_SESSION["error_login"]);
     }
+    // Se il login ha avuto successo, reindirizza alla home
     else if (isset($_GET['login']) && $_GET['login'] === "success")
     {
         header("Location: home.php");
@@ -23,6 +28,10 @@ function check_login_errors()
     }
 }
 
+/**
+ * Controlla e visualizza eventuali errori di autorizzazione.
+ * Dopo averli mostrati, rimuove gli errori dalla sessione.
+ */
 function check_auth_errors()
 {
     if(isset($_SESSION["auth_errors"]))
@@ -39,6 +48,10 @@ function check_auth_errors()
     }
 }
 
+/**
+ * Controlla e visualizza eventuali errori di sessione.
+ * Dopo averli mostrati, rimuove gli errori dalla sessione.
+ */
 function check_session_errors()
 {
     if(isset($_SESSION["session_error"]))
@@ -51,10 +64,14 @@ function check_session_errors()
             echo '<p class=form-error>' . $error . '</p>';
         }
 
-        unset($_SESSION["auth_errors"]);
+        unset($_SESSION["session_error"]);
     }
 }
 
+/**
+ * Controlla e visualizza eventuali errori nel cambio password.
+ * Dopo averli mostrati, rimuove gli errori dalla sessione.
+ */
 function check_passCh_errors()
 {
     if(isset($_SESSION["passCh_error"]))
@@ -71,6 +88,9 @@ function check_passCh_errors()
     }
 }
 
+/**
+ * Stampa il nome utente se la sessione è attiva, altrimenti mostra un messaggio di sessione scaduta.
+ */
 function output_username()
 {
     if(isset($_SESSION["user_id"]))
@@ -83,6 +103,9 @@ function output_username()
     }
 }
 
+/**
+ * Stampa l'ID del privilegio dell'utente se la sessione è attiva, altrimenti mostra un messaggio di sessione scaduta.
+ */
 function output_privilege_id()
 {
     if(isset($_SESSION["user_privilege"]))
@@ -95,6 +118,9 @@ function output_privilege_id()
     }
 }
 
+/**
+ * Stampa il nome del privilegio dell'utente se la sessione è attiva, altrimenti mostra un messaggio di sessione scaduta.
+ */
 function output_privilege_name()
 {
     if(isset($_SESSION["user_privilege_name"]))
@@ -107,6 +133,9 @@ function output_privilege_name()
     }
 }
 
+/**
+ * Stampa il nome della famiglia dell'utente se la sessione è attiva, altrimenti mostra "Nessuna Famiglia".
+ */
 function output_famiglia()
 {
     if(isset($_SESSION["user_family_name"]))

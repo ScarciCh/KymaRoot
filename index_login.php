@@ -15,6 +15,7 @@ require_once 'include/login_view.inc.php';
     </head>
 
     <body>
+        <!-- Una volta completata il login il modulo "login.inc.php" gestirá la richiesta-->
         <form action="include/login.inc.php" method="post">
             <h3>Accedi</h3>
 
