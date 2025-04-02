@@ -23,9 +23,9 @@ Prima di incominciare ad utilizzare l'applicazione web é necessario inizializza
 
 Il Database prevede un utente Admin predefinito a cui é possibile accedere con le credenziali:
 - Nome Utente: **admin**;
-- Password: **admin**;  
-É necessario accedere a questo utente per impostare le categorie utente di altri eventuali utenti. É consigliato inoltre modificare la Password di quest'ultimo una volta effettuato l'accesso
+- Password: **admin**;
 
+É necessario accedere a questo utente per impostare le categorie utente di altri eventuali utenti. É consigliato inoltre modificare la Password di quest'ultimo una volta effettuato l'accesso.
 ## Struttura del Database
 ![KR_Database_DiagramIMG](https://github.com/user-attachments/assets/628a8cf7-b94a-4474-b0cf-13cf910269a2)
 
