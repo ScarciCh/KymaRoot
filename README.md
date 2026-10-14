@@ -30,8 +30,8 @@ Il Database prevede un utente Admin predefinito a cui é possibile accedere con 
 ![KR_Database_DiagramIMG](https://github.com/user-attachments/assets/628a8cf7-b94a-4474-b0cf-13cf910269a2)
 
 ## To Do
-- [ ] Rendere possibile l'hosting del documento direttamente nel Database;
 - [ ] Rendere non visibili i collegamenti alle pagine a cui un utente non é autorizzato;
 - [ ] Implementare una funzione di ricerca nella bacheca documenti;
+
 ## Crediti
 Realizzato dagli studenti del ITT A. Pacinotti di Taranto: Scarci Christian, Ferrara Vincenzo, Rizzi Raffaele, Latagliata Dario, Gigante Vincenzo, D'Andria Mattia
